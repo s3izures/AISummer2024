@@ -53,6 +53,11 @@ void Ai::Start()
     // choose a random home and dest from squares
     int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
     int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    while (grid[randRow][randCol].blocked)
+    {
+        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
+        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    }
     pointA = grid[randRow][randCol];
     pointA.costText = "A";
     pointA.fillColor = GREEN;
@@ -60,11 +65,18 @@ void Ai::Start()
 
     randRow = GetRandomValue(0, (int)(grid.size()) - 1);
     randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    while (grid[randRow][randCol].blocked && randRow != pointA.row && randCol != pointA.col)
+    {
+        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
+        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    }
     pointB = grid[randRow][randCol];
     pointB.costText = "B";
     pointB.fillColor = BLUE;
     pointB.blocked = true; // this just so the color renders
 
+    //BFS(&pointA, &pointB);
+    DFS(&pointA, &pointB);
 }
 
 void Ai::UpdateAndDraw()
@@ -76,9 +88,7 @@ void Ai::UpdateAndDraw()
     // Check if the "R" key is pressed
     if (IsKeyPressed(KEY_R)) { Start(); } // RESTART
 
-    BFS(&pointA,&pointB);
-
-    for (Node* node : bfsTracedPath)
+    for (Node* node : dfsTracedPath)
     {
         node->DrawPath(bfsColor);
     }
