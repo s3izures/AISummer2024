@@ -18,6 +18,7 @@ public:
 
     vector<vector<Node>> grid;
     Node pointA, pointB;
+    int threshold = 2;
 
     void Main();
     void Start();
@@ -26,11 +27,11 @@ public:
     // SEARCH ALGORITHMS
     vector<Node*> bfsTracedPath;
     void BFS(Node* start, Node* goal);
-    Color bfsColor = Color{ 200,0,0,100 };
+    Color bfsColor = Color{ 0,0,255,100 };
 
     vector<Node*> dfsTracedPath;
     void DFS(Node* start, Node* goal);
-    Color dfsColor = Color{ 200,0,0,100 };
+    Color dfsColor = Color{ 255,0,0,100 };
 
 
 
@@ -71,5 +72,46 @@ public:
         }
 
         return neighbours;
+    }
+
+    void CreateHotspot(Node* node, int size)
+    {
+        Node* current = node;
+        grid[current->row][current->col].weight = size;
+
+        auto isWithinGrid = [&](int row, int col) -> bool
+            {
+                return row >= 0 &&
+                    col >= 0 &&
+                    row < ROWS &&
+                    col < COLS;
+            };
+
+        for (int i = size - 1; i > 0; i--)
+        {
+            // check north
+            if (isWithinGrid(current->row - i, current->col))
+            {
+                grid[current->row - i][current->col].weight = size - i;
+            }
+
+            //check south
+            if (isWithinGrid(current->row + i, current->col))
+            {
+                grid[current->row + i][current->col].weight = size - i;
+            }
+
+            //check east
+            if (isWithinGrid(current->row, current->col - i))
+            {
+                grid[current->row][current->col - i].weight = size - i;
+            }
+
+            //check west
+            if (isWithinGrid(current->row, current->col + i))
+            {
+                grid[current->row][current->col + i].weight = size - i;
+            }
+        }
     }
 };

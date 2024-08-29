@@ -40,7 +40,7 @@ void Ai::DFS(Node* start, Node* goal)
         // add the neighbours to the open set
         for (Node* neighbour : GetNeighbours(current))
         {
-            if (neighbour->blocked || neighbour->visited)
+            if (neighbour->blocked || neighbour->visited || neighbour->weight > threshold)
             {
                 continue;
             }

@@ -75,25 +75,50 @@ void Ai::Start()
     pointB.fillColor = BLUE;
     pointB.blocked = true; // this just so the color renders
 
-    //BFS(&pointA, &pointB);
-    DFS(&pointA, &pointB);
+
+    randRow = GetRandomValue(0, (int)(grid.size()) - 1);
+    randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    while (grid[randRow][randCol].blocked && randRow != pointA.row && randCol != pointA.col)
+    {
+        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
+        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    }
+    int randSize = GetRandomValue(threshold + 1, 5);
+    CreateHotspot(&grid[randRow][randCol], randSize);
 }
 
 void Ai::UpdateAndDraw()
 {
     for (int i = 0; i < (int)(grid.size()); i++)
+    {
         for (int j = 0; j < (int)(grid[i].size()); j++)
+        {
             grid[i][j].Draw();
+            if (grid[i][j].weight > 0)
+            {
+                unsigned char alpha = 50 + grid[i][j].weight * 20;
+                grid[i][j].DrawPath(Color{ 255,255,0,alpha });
+            }
+        }
+    }
 
     // Check if the "R" key is pressed
     if (IsKeyPressed(KEY_R)) { Start(); } // RESTART
 
-    for (Node* node : dfsTracedPath)
+    for (Node* node : bfsTracedPath)
     {
         node->DrawPath(bfsColor);
+    }
+
+    for (Node* node : dfsTracedPath)
+    {
+        node->DrawPath(dfsColor);
     }
 
     // draw home and dest. Reset 
     pointA.step = -1; pointA.Draw();
     pointB.step = -1; pointB.Draw();
+
+    //BFS(&pointA, &pointB);
+    DFS(&pointA, &pointB);
 }

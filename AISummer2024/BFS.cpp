@@ -37,14 +37,14 @@ void Ai::BFS(Node* start, Node* goal)
             }
 
             reverse(bfsTracedPath.begin(), bfsTracedPath.end());
-
+            
             return;
         }
 
         // add the neighbours to the open set
         for (Node* neighbour : GetNeighbours(current))
         {
-            if (neighbour->blocked || neighbour->visited)
+            if (neighbour->blocked || neighbour->visited || neighbour->weight > threshold)
             {
                 continue;
             }
