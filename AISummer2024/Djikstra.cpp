@@ -1,6 +1,5 @@
 #include "AI.h"
 #include <queue>
-#include <iostream>
 
 void Ai::Djikstra(Node* start, Node* goal)
 {
@@ -43,7 +42,7 @@ void Ai::Djikstra(Node* start, Node* goal)
 
         for (Node* neighbour : GetNeighbours(current))
         {
-            if (neighbour->blocked || neighbour->visited) // || neighbour->weight > threshold
+            if (neighbour->blocked || neighbour->visited)
             {
                 continue;
             }
