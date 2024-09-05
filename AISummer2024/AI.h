@@ -37,6 +37,10 @@ public:
     void Djikstra(Node* start, Node* goal);
     Color djikstraColor = Color{ 0,255,0,100 };
 
+    vector<Node*> aStarTracedPath;
+    void AStar(Node* start, Node* goal);
+    Color aStarColor = Color{ 255,0,255,100 };
+
 
 
     vector<Node*> GetNeighbours(Node* node)

@@ -42,7 +42,7 @@ void Ai::Start()
     }
 
     // take some (e.g., 5, 10, or 20) from sqaures randomly and put in blockd ones
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < 25; i++)
     {
         int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
         int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
@@ -115,18 +115,24 @@ void Ai::UpdateAndDraw()
     {
         node->DrawPath(dfsColor);
     }
-    */
 
     for (Node* node : djikstraTracedPath)
     {
         node->DrawPath(djikstraColor);
     }
 
+    for (Node* node : aStarTracedPath)
+    {
+        node->DrawPath(aStarColor);
+    }
+    */
+
     // draw home and dest. Reset 
     pointA.step = -1; pointA.Draw();
     pointB.step = -1; pointB.Draw();
 
-    //BFS(&pointA, &pointB);
+    BFS(&pointA, &pointB);
     //DFS(&pointA, &pointB);
-    Djikstra(&pointA, &pointB);
+    //Djikstra(&pointA, &pointB);
+    //AStar(&pointA, &pointB);
 }
