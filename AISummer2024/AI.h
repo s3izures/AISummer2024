@@ -91,30 +91,30 @@ public:
                     col < COLS;
             };
 
-        for (int i = size - 1; i > 0; i--)
+        for (int i = size; i > 0; i--)
         {
             // check north
             if (isWithinGrid(current->row - i, current->col))
             {
-                grid[current->row - i][current->col].weight = size - i;
+                grid[current->row - i][current->col].weight += size - i;
             }
 
             //check south
             if (isWithinGrid(current->row + i, current->col))
             {
-                grid[current->row + i][current->col].weight = size - i;
+                grid[current->row + i][current->col].weight += size - i;
             }
 
             //check east
             if (isWithinGrid(current->row, current->col - i))
             {
-                grid[current->row][current->col - i].weight = size - i;
+                grid[current->row][current->col - i].weight += size - i;
             }
 
             //check west
             if (isWithinGrid(current->row, current->col + i))
             {
-                grid[current->row][current->col + i].weight = size - i;
+                grid[current->row][current->col + i].weight += size - i;
             }
         }
     }

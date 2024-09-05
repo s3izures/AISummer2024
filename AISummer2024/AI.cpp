@@ -42,7 +42,7 @@ void Ai::Start()
     }
 
     // take some (e.g., 5, 10, or 20) from sqaures randomly and put in blockd ones
-    for (int i = 0; i < 50; i++)
+    for (int i = 0; i < 2; i++)
     {
         int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
         int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
@@ -94,7 +94,7 @@ void Ai::UpdateAndDraw()
         for (int j = 0; j < (int)(grid[i].size()); j++)
         {
             grid[i][j].Draw();
-            if (grid[i][j].weight > 0)
+            if (grid[i][j].weight > 1)
             {
                 unsigned char alpha = 50 + grid[i][j].weight * 20;
                 grid[i][j].DrawPath(Color{ 255,255,0,alpha });

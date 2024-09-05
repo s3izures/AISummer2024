@@ -14,7 +14,7 @@ struct Node
     Vector2 position;
     Color fillColor, outlineColor;
     bool blocked = false;
-    int weight = 0;
+    int weight = 1;
 
     int step = -1; // we keep this -1 for A and B and set costText Manually
     string costText = "";
