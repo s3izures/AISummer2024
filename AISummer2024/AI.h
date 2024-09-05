@@ -19,6 +19,8 @@ public:
     vector<vector<Node>> grid;
     Node pointA, pointB;
     int threshold = 2;
+    int pathIndex = 0;
+    bool trackBool = false;
 
     void Main();
     void Start();

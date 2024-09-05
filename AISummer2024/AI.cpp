@@ -104,11 +104,13 @@ void Ai::UpdateAndDraw()
     }
 
     // Check if the "R" key is pressed
-    if (IsKeyPressed(KEY_R)) { Start(); } // RESTART
+    if (IsKeyPressed(KEY_R)) { pathIndex = 0;  Start(); } // RESTART
+    if (IsKeyPressed(KEY_N)) { if (pathIndex < aStarTracedPath.size()) { pathIndex += 1; } };
+    if (IsKeyPressed(KEY_L)) { trackBool = true; };
 
-    for (Node* node : bfsTracedPath)
+    for (int i = 0 ; i < pathIndex;i++)
     {
-        node->DrawPath(bfsColor);
+        aStarTracedPath[i]->DrawPath(aStarColor);
     }
 
     /*for (Node* node : dfsTracedPath)
@@ -130,8 +132,8 @@ void Ai::UpdateAndDraw()
     pointA.step = -1; pointA.Draw();
     pointB.step = -1; pointB.Draw();
 
-    BFS(&pointA, &pointB);
+    //BFS(&pointA, &pointB);
     //DFS(&pointA, &pointB);
     //Djikstra(&pointA, &pointB);
-    //AStar(&pointA, &pointB);
+    AStar(&pointA, &pointB);
 }

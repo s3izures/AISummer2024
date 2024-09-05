@@ -3,8 +3,6 @@
 
 void Ai::BFS(Node* start, Node* goal)
 {
-    bfsTracedPath.clear();
-
     // resetting the nodes in the grid
     for (auto& row : grid)
     {
