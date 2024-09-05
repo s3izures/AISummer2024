@@ -42,7 +42,7 @@ void Ai::Start()
     }
 
     // take some (e.g., 5, 10, or 20) from sqaures randomly and put in blockd ones
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < 50; i++)
     {
         int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
         int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
@@ -53,7 +53,7 @@ void Ai::Start()
     // choose a random home and dest from squares
     int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
     int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    while (grid[randRow][randCol].blocked)
+    while (grid[randRow][randCol].blocked && randRow != pointB.row && randCol != pointB.col)
     {
         randRow = GetRandomValue(0, (int)(grid.size()) - 1);
         randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
@@ -84,7 +84,7 @@ void Ai::Start()
         randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
     }
     int randSize = GetRandomValue(threshold + 1, 5);
-    CreateHotspot(&grid[randRow][randCol], randSize);
+    //CreateHotspot(&grid[randRow][randCol], randSize);
 }
 
 void Ai::UpdateAndDraw()
@@ -94,17 +94,18 @@ void Ai::UpdateAndDraw()
         for (int j = 0; j < (int)(grid[i].size()); j++)
         {
             grid[i][j].Draw();
-            if (grid[i][j].weight > 0)
+            /*if (grid[i][j].weight > 0)
             {
                 unsigned char alpha = 50 + grid[i][j].weight * 20;
                 grid[i][j].DrawPath(Color{ 255,255,0,alpha });
-            }
+            }*/
         }
     }
 
     // Check if the "R" key is pressed
     if (IsKeyPressed(KEY_R)) { Start(); } // RESTART
 
+    /*
     for (Node* node : bfsTracedPath)
     {
         node->DrawPath(bfsColor);
@@ -114,11 +115,18 @@ void Ai::UpdateAndDraw()
     {
         node->DrawPath(dfsColor);
     }
+    */
+
+    for (Node* node : djikstraTracedPath)
+    {
+        node->DrawPath(djikstraColor);
+    }
 
     // draw home and dest. Reset 
     pointA.step = -1; pointA.Draw();
     pointB.step = -1; pointB.Draw();
 
     //BFS(&pointA, &pointB);
-    DFS(&pointA, &pointB);
+    //DFS(&pointA, &pointB);
+    Djikstra(&pointA, &pointB);
 }

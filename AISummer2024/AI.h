@@ -33,6 +33,10 @@ public:
     void DFS(Node* start, Node* goal);
     Color dfsColor = Color{ 255,0,0,100 };
 
+    vector<Node*> djikstraTracedPath;
+    void Djikstra(Node* start, Node* goal);
+    Color djikstraColor = Color{ 0,255,0,100 };
+
 
 
     vector<Node*> GetNeighbours(Node* node)
