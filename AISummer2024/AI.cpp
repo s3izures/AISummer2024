@@ -84,7 +84,7 @@ void Ai::Start()
         randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
     }
     int randSize = GetRandomValue(threshold + 1, 5);
-    //CreateHotspot(&grid[randRow][randCol], randSize);
+    CreateHotspot(&grid[randRow][randCol], randSize);
 }
 
 void Ai::UpdateAndDraw()
@@ -94,11 +94,11 @@ void Ai::UpdateAndDraw()
         for (int j = 0; j < (int)(grid[i].size()); j++)
         {
             grid[i][j].Draw();
-            /*if (grid[i][j].weight > 0)
+            if (grid[i][j].weight > 0)
             {
                 unsigned char alpha = 50 + grid[i][j].weight * 20;
                 grid[i][j].DrawPath(Color{ 255,255,0,alpha });
-            }*/
+            }
         }
     }
 

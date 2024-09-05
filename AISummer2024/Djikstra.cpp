@@ -50,10 +50,10 @@ void Ai::Djikstra(Node* start, Node* goal)
 
             //== Calculate tentative cost ==
 
-            float tenCost = current->gCost + 1;
+            float tenCost = current->gCost + current->weight;
 
             //Neighbour's path is better
-            if (tenCost < neighbour->gCost)
+            if (tenCost < neighbour->gCost + neighbour->weight)
             {
                 neighbour->gCost = tenCost;
                 neighbour->parent = current;
@@ -64,7 +64,5 @@ void Ai::Djikstra(Node* start, Node* goal)
             //==============================
         }
     }
-
-    cout << "Not found" << endl;
 
 }
