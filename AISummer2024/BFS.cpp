@@ -20,10 +20,11 @@ void Ai::BFS(Node* start, Node* goal)
     openSet.push(start);    // We begin by pushing the start into it
 
     start->visited = true;
+    Node* current = openSet.front();
 
     while (!openSet.empty())
     {
-        Node* current = openSet.front();    // get the first node of the queue
+        current = openSet.front();    // get the first node of the queue
         openSet.pop();
 
         if (current->atSameSpot(*goal))
@@ -35,9 +36,7 @@ void Ai::BFS(Node* start, Node* goal)
 
                 current = current->parent;
             }
-
             reverse(bfsTracedPath.begin(), bfsTracedPath.end());
-            
             return;
         }
 
@@ -51,7 +50,6 @@ void Ai::BFS(Node* start, Node* goal)
 
             neighbour->visited = true;
             neighbour->parent = current;
-
             neighbour->step = current->step + 1;
 
             openSet.push(neighbour);

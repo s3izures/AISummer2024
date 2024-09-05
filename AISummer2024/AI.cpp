@@ -89,6 +89,7 @@ void Ai::Start()
 
 void Ai::UpdateAndDraw()
 {
+
     for (int i = 0; i < (int)(grid.size()); i++)
     {
         for (int j = 0; j < (int)(grid[i].size()); j++)
@@ -105,13 +106,12 @@ void Ai::UpdateAndDraw()
     // Check if the "R" key is pressed
     if (IsKeyPressed(KEY_R)) { Start(); } // RESTART
 
-    /*
     for (Node* node : bfsTracedPath)
     {
         node->DrawPath(bfsColor);
     }
 
-    for (Node* node : dfsTracedPath)
+    /*for (Node* node : dfsTracedPath)
     {
         node->DrawPath(dfsColor);
     }
@@ -124,8 +124,7 @@ void Ai::UpdateAndDraw()
     for (Node* node : aStarTracedPath)
     {
         node->DrawPath(aStarColor);
-    }
-    */
+    }*/
 
     // draw home and dest. Reset 
     pointA.step = -1; pointA.Draw();
