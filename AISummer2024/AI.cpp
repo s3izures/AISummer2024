@@ -35,7 +35,8 @@ void Ai::Start()
         for (int col = 0; col < COLS; col++)
         {
             float x = NODE_SIZE * col;
-            Node node = { row, col, Vector2{x, y}, DARKGRAY, LIGHTGRAY }; // fill, stroke
+            Node node = { row, col, Vector2{x, y} };
+            node.SetState(NodeState::Idle);
             rowNodes.push_back(node);
         }
         grid.push_back(rowNodes);
@@ -44,47 +45,11 @@ void Ai::Start()
     // take some (e.g., 5, 10, or 20) from sqaures randomly and put in blockd ones
     for (int i = 0; i < 25; i++)
     {
-        int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-        int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-        grid[randRow][randCol].blocked = true;
+        GetRandNode()->SetState(NodeState::Blocked);
     }
 
-
-    // choose a random home and dest from squares
-    int randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-    int randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    while (grid[randRow][randCol].blocked && randRow != pointB.row && randCol != pointB.col)
-    {
-        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    }
-    pointA = grid[randRow][randCol];
-    pointA.costText = "A";
-    pointA.fillColor = GREEN;
-    pointA.blocked = true; // this just so the color renders
-
-    randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-    randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    while (grid[randRow][randCol].blocked && randRow != pointA.row && randCol != pointA.col)
-    {
-        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    }
-    pointB = grid[randRow][randCol];
-    pointB.costText = "B";
-    pointB.fillColor = BLUE;
-    pointB.blocked = true; // this just so the color renders
-
-
-    randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-    randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    while (grid[randRow][randCol].blocked && randRow != pointA.row && randCol != pointA.col)
-    {
-        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
-        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
-    }
-    int randSize = GetRandomValue(threshold + 1, 5);
-    CreateHotspot(&grid[randRow][randCol], randSize);
+    GetRandNode()->SetState(NodeState::Start, 0);
+    GetRandNode()->SetState(NodeState::Goal);
 }
 
 void Ai::UpdateAndDraw()
@@ -95,45 +60,58 @@ void Ai::UpdateAndDraw()
         for (int j = 0; j < (int)(grid[i].size()); j++)
         {
             grid[i][j].Draw();
-            if (grid[i][j].weight > 1)
+        }
+    }
+
+
+
+    // Check if the "R" key is pressed
+    if (IsKeyPressed(KEY_R)) 
+    { 
+        pathIndex = 0;
+        Start(); 
+    } // RESTART
+
+    if (IsKeyPressed(KEY_B))
+    {
+        if (GetSpecialNode(NodeState::Goal)->isTransitioning) return;
+
+        GetSpecialNode(NodeState::Goal)->SetState(NodeState::Idle, 99, true);
+        GetRandNode()->SetState(NodeState::Goal, 0, true);
+    }
+
+    if (IsKeyPressed(KEY_L)) 
+    { 
+        trackBool = true; 
+    };
+}
+
+Node* Ai::GetRandNode()
+{
+    int randRow;
+    int randCol;
+
+    do
+    {
+        randRow = GetRandomValue(0, (int)(grid.size()) - 1);
+        randCol = GetRandomValue(0, (int)(grid[randRow].size()) - 1);
+    } while (grid[randRow][randCol].currentState == NodeState::Blocked || grid[randRow][randCol].currentState == NodeState::Start || grid[randRow][randCol].currentState == NodeState::Goal);
+
+    return &grid[randRow][randCol];
+}
+
+Node* Ai::GetSpecialNode(NodeState state)
+{
+    for (int i = 0; i < (int)(grid.size()); i++)
+    {
+        for (int j = 0; j < (int)(grid[i].size()); j++)
+        {
+            if (grid[i][j].currentState == state)
             {
-                unsigned char alpha = 50 + grid[i][j].weight * 20;
-                grid[i][j].DrawPath(Color{ 255,255,0,alpha });
+                return &grid[i][j];
             }
         }
     }
 
-    // Check if the "R" key is pressed
-    if (IsKeyPressed(KEY_R)) { pathIndex = 0;  Start(); } // RESTART
-    if (IsKeyPressed(KEY_N)) { if (pathIndex < aStarTracedPath.size()) { pathIndex += 1; } };
-    if (IsKeyPressed(KEY_L)) { trackBool = true; };
-
-    for (int i = 0 ; i < pathIndex;i++)
-    {
-        aStarTracedPath[i]->DrawPath(aStarColor);
-    }
-
-    /*for (Node* node : dfsTracedPath)
-    {
-        node->DrawPath(dfsColor);
-    }
-
-    for (Node* node : djikstraTracedPath)
-    {
-        node->DrawPath(djikstraColor);
-    }
-
-    for (Node* node : aStarTracedPath)
-    {
-        node->DrawPath(aStarColor);
-    }*/
-
-    // draw home and dest. Reset 
-    pointA.step = -1; pointA.Draw();
-    pointB.step = -1; pointB.Draw();
-
-    //BFS(&pointA, &pointB);
-    //DFS(&pointA, &pointB);
-    //Djikstra(&pointA, &pointB);
-    AStar(&pointA, &pointB);
+    return &grid[0][0]; // not found
 }

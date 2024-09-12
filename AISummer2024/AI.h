@@ -26,22 +26,10 @@ public:
     void Start();
     void UpdateAndDraw();
 
+    Node* GetRandNode();
+    Node* GetSpecialNode(NodeState node);
+
     // SEARCH ALGORITHMS
-    vector<Node*> bfsTracedPath;
-    void BFS(Node* start, Node* goal);
-    Color bfsColor = Color{ 0,0,255,100 };
-
-    vector<Node*> dfsTracedPath;
-    void DFS(Node* start, Node* goal);
-    Color dfsColor = Color{ 255,0,0,100 };
-
-    vector<Node*> djikstraTracedPath;
-    void Djikstra(Node* start, Node* goal);
-    Color djikstraColor = Color{ 0,255,0,100 };
-
-    vector<Node*> aStarTracedPath;
-    void AStar(Node* start, Node* goal);
-    Color aStarColor = Color{ 255,0,255,100 };
 
 
 
@@ -82,46 +70,5 @@ public:
         }
 
         return neighbours;
-    }
-
-    void CreateHotspot(Node* node, int size)
-    {
-        Node* current = node;
-        grid[current->row][current->col].weight = size;
-
-        auto isWithinGrid = [&](int row, int col) -> bool
-            {
-                return row >= 0 &&
-                    col >= 0 &&
-                    row < ROWS &&
-                    col < COLS;
-            };
-
-        for (int i = size; i > 0; i--)
-        {
-            // check north
-            if (isWithinGrid(current->row - i, current->col))
-            {
-                grid[current->row - i][current->col].weight += size - i;
-            }
-
-            //check south
-            if (isWithinGrid(current->row + i, current->col))
-            {
-                grid[current->row + i][current->col].weight += size - i;
-            }
-
-            //check east
-            if (isWithinGrid(current->row, current->col - i))
-            {
-                grid[current->row][current->col - i].weight += size - i;
-            }
-
-            //check west
-            if (isWithinGrid(current->row, current->col + i))
-            {
-                grid[current->row][current->col + i].weight += size - i;
-            }
-        }
     }
 };
